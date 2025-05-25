@@ -1,6 +1,11 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton/optional/presets';
+@import './styles/theme.css';
+
+@source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
 
 @theme {
 	--bg-color: oklch(0.2883 0.0228 234.71);

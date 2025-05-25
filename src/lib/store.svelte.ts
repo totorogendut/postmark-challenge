@@ -11,4 +11,4 @@ export class Mail {
 	inboxList = $state<Inbox[]>();
 }
 
-export const mail = new Mail();
+export const mails = new Mail();

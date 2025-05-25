@@ -1,0 +1,323 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "b5ca10f5-cfc7-4e4e-b236-94592d4aa666",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "mail": {
+      "name": "mail",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "summarry": {
+          "name": "summarry",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "subject": {
+          "name": "subject",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "text_body": {
+          "name": "text_body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "categories": {
+          "name": "categories",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sentiment": {
+          "name": "sentiment",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mail_from": {
+          "name": "mail_from",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mail_from_name": {
+          "name": "mail_from_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mail_to": {
+          "name": "mail_to",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "mail_mail_to_user_id_fk": {
+          "name": "mail_mail_to_user_id_fk",
+          "tableFrom": "mail",
+          "tableTo": "user",
+          "columnsFrom": [
+            "mail_to"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "session": {
+      "name": "session",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "session_user_id_user_id_fk": {
+          "name": "session_user_id_user_id_fk",
+          "tableFrom": "session",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "user": {
+      "name": "user",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "avatar": {
+          "name": "avatar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "inbox_hash": {
+          "name": "inbox_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "user_username_unique": {
+          "name": "user_username_unique",
+          "columns": [
+            "username"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {
+    "inbox_category_view": {
+      "columns": {
+        "user": {
+          "name": "user",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sponsorship_count": {
+          "name": "sponsorship_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "advertisement_count": {
+          "name": "advertisement_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "promotion_count": {
+          "name": "promotion_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "collaboration_count": {
+          "name": "collaboration_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "relaxed_count": {
+          "name": "relaxed_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "formal_count": {
+          "name": "formal_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "humorous_count": {
+          "name": "humorous_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "angry_count": {
+          "name": "angry_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sad_count": {
+          "name": "sad_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "polite_count": {
+          "name": "polite_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "individual_count": {
+          "name": "individual_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "organization_count": {
+          "name": "organization_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "government_count": {
+          "name": "government_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "name": "inbox_category_view",
+      "isExisting": false,
+      "definition": "SELECT\n\tmail.mail_to AS user,\n  CAST(COUNT(DISTINCT CASE WHEN value = 'sponsorship' THEN mail.id END) AS INTEGER) AS sponsorship_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'advertisement' THEN mail.id END) AS INTEGER) AS advertisement_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'promotion' THEN mail.id END) AS INTEGER) AS promotion_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'collaboration' THEN mail.id END) AS INTEGER) AS collaboration_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'relaxed' THEN mail.id END) AS INTEGER) AS relaxed_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'formal' THEN mail.id END) AS INTEGER) AS formal_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'humorous' THEN mail.id END) AS INTEGER) AS humorous_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'angry' THEN mail.id END) AS INTEGER) AS angry_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'sad' THEN mail.id END) AS INTEGER) AS sad_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'polite' THEN mail.id END) AS INTEGER) AS polite_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'individual' THEN mail.id END) AS INTEGER) AS individual_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'organization' THEN mail.id END) AS INTEGER) AS organization_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'government' THEN mail.id END) AS INTEGER) AS government_count\nFROM mail, json_each(mail.categories)\nWHERE value IN ('sponsorship', 'advertisement', 'promotion', 'collaboration', 'relaxed', 'formal', 'humorous', 'angry', 'sad', 'polite', 'individual', 'organization', 'government')\nGROUP BY mail.mail_to"
+    }
+  },
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

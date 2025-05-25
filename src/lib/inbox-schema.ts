@@ -9,6 +9,7 @@ const inbox = z.object({
 		.max(SCHEMA_CONSTS.SUMMARY.max),
 	content: z.string(),
 	sender: z.email(),
+	subject: z.string(),
 	createdAt: z.date(),
 	category: z.object({
 		business: z.enum(categories.business),
