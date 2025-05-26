@@ -1,7 +1,7 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { BASE_TABLE } from "./_shared";
 import { relations } from "drizzle-orm";
-import { mail } from "./inbox";
+import { mail, mailCategoryView } from "./inbox";
 import { nanoid } from "nanoid";
 
 export const user = sqliteTable("user", {
@@ -10,10 +10,13 @@ export const user = sqliteTable("user", {
 	passwordHash: text("password_hash").notNull(),
 	avatar: text("avatar"),
 	inboxHash: text("inbox_hash").$defaultFn(() => nanoid()),
+	categoriesView: text("categories_view").references(
+		() => mailCategoryView.user,
+	),
 	...BASE_TABLE,
 });
 
-export const userRelations = relations(user, ({ many }) => ({
+export const userRelations = relations(user, ({ many, one }) => ({
 	mails: many(mail),
 }));
 

@@ -1,5 +1,5 @@
 import { z } from "zod/v4";
-import { categories } from "./categories";
+import { categories } from "./_consts";
 import { SCHEMA_CONSTS } from "./_consts";
 
 const inbox = z.object({
