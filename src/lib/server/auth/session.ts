@@ -35,19 +35,20 @@ export async function validateSessionToken(token: string) {
 		.select({
 			// Adjust user table here to tweak returned data
 			user: {
-				id: table.user.id,
-				username: table.user.username,
-				avatar: table.user.avatar,
+				id: table.users.id,
+				username: table.users.username,
+				avatar: table.users.avatar,
 			},
 			session: table.session,
 		})
 		.from(table.session)
-		.innerJoin(table.user, eq(table.session.userId, table.user.id))
+		.innerJoin(table.users, eq(table.session.userId, table.users.id))
 		.where(eq(table.session.id, sessionId));
 
 	if (!result) {
 		return { session: null, user: null };
 	}
+
 	const { session, user } = result;
 
 	const sessionExpired = Date.now() >= session.expiresAt.getTime();

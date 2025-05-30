@@ -1,5 +1,6 @@
 import { allCategories, type categories } from "../../../_consts";
 import {
+	index,
 	integer,
 	sqliteTable,
 	sqliteView,
@@ -7,7 +8,7 @@ import {
 } from "drizzle-orm/sqlite-core";
 import { BASE_TABLE } from "./_shared";
 import { nanoid } from "nanoid";
-import { user } from "./users";
+import { users } from "./users";
 import { relations, sql } from "drizzle-orm";
 
 interface MailCategory {
@@ -25,18 +26,24 @@ export const mail = sqliteTable(
 		summary: text("summarry"),
 		subject: text("subject"),
 		textBody: text("text_body"),
+		hasRead: integer("has_read", { mode: "boolean" }).$default(() => false),
 		categories: text("categories", { mode: "json" }).$type<MailCategory>(),
 		sentiment: integer("sentiment"),
-		mailFrom: text("mail_from"),
+		mailFrom: text("mail_from").notNull(),
 		mailFromName: text("mail_from_name"),
-		mailTo: text("mail_to").references(() => user.id),
+		mailTo: text("mail_to").notNull(),
+		mailToUser: text("mail_to_user").references(() => users.id),
 		...BASE_TABLE,
 	},
-	() => [],
+	(table) => [
+		index("mail_to_idc").on(table.mailToUser),
+		index("created_at_idx").on(table.createdAt),
+		index("categories_idx").on(table.categories),
+	],
 );
 
 export const mailRelations = relations(mail, ({ one }) => ({
-	mailTo: one(user, { fields: [mail.mailTo], references: [user.id] }),
+	mailToUser: one(users, { fields: [mail.mailToUser], references: [users.id] }),
 }));
 
 const mailViewColumns = {

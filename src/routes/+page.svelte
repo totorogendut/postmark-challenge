@@ -6,12 +6,10 @@
 
 	const mailCount = 4;
 	const { data } = $props();
-
-	console.log(data);
 </script>
 
 <header class="mx-auto mt-48 flex w-full max-w-[1200px] items-center gap-12">
-	<Avatar size="128" src={user.avatar} name={user.name} />
+	<img class="rounded-full" width="128" height="128" src={user.avatar} alt={user.name} />
 	<div class="flex flex-col gap-2">
 		<h1 class="text-7xl font-extrabold">Good Morning, {user.name}</h1>
 		<strong class="text-2xl font-medium">We organized your inbox below</strong>

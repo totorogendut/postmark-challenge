@@ -8,7 +8,7 @@ import {
 	setSessionTokenCookie,
 } from "./session";
 import { getRequestEvent } from "$app/server";
-import { user } from "../db/schemas/users";
+import { users } from "../db/schemas/users";
 import { eq } from "drizzle-orm";
 
 export async function registerUser(username: string, password: string) {
@@ -26,13 +26,12 @@ export async function registerUser(username: string, password: string) {
 	});
 
 	try {
-		await db.insert(user).values({ id: userId, username, passwordHash });
+		await db.insert(users).values({ id: userId, username, passwordHash });
 
 		const sessionToken = generateSessionToken();
 		const session = await createSession(sessionToken, userId);
 		setSessionTokenCookie(event, sessionToken, session.expiresAt);
 	} catch (e) {
-		console.error(e);
 		throw new Error("Error on registering user");
 	}
 }
@@ -48,12 +47,12 @@ export async function loginUser(username: string, password: string) {
 
 	const results = await db
 		.select()
-		.from(user)
-		.where(eq(user.username, username));
+		.from(users)
+		.where(eq(users.username, username));
 
 	const existingUser = results.at(0);
 	if (!existingUser) {
-		return fail(400, { message: "Incorrect username or password" });
+		throw new Error("Incorrect username or password");
 	}
 
 	const validPassword = await verify(existingUser.passwordHash, password, {
@@ -63,7 +62,7 @@ export async function loginUser(username: string, password: string) {
 		parallelism: 1,
 	});
 	if (!validPassword) {
-		return fail(400, { message: "Incorrect username or password" });
+		throw new Error("Incorrect username or password");
 	}
 
 	const sessionToken = generateSessionToken();

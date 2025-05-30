@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "b5ca10f5-cfc7-4e4e-b236-94592d4aa666",
+  "id": "e0644b9a-c16b-40f9-bbe8-f20694edfa9e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "mail": {
@@ -35,6 +35,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "has_read": {
+          "name": "has_read",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "categories": {
           "name": "categories",
           "type": "text",
@@ -53,7 +60,7 @@
           "name": "mail_from",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "mail_from_name": {
@@ -67,6 +74,13 @@
           "name": "mail_to",
           "type": "text",
           "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "mail_to_user": {
+          "name": "mail_to_user",
+          "type": "text",
+          "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
@@ -78,14 +92,36 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "mail_to_idc": {
+          "name": "mail_to_idc",
+          "columns": [
+            "mail_to_user"
+          ],
+          "isUnique": false
+        },
+        "created_at_idx": {
+          "name": "created_at_idx",
+          "columns": [
+            "expires_at"
+          ],
+          "isUnique": false
+        },
+        "categories_idx": {
+          "name": "categories_idx",
+          "columns": [
+            "categories"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "mail_mail_to_user_id_fk": {
-          "name": "mail_mail_to_user_id_fk",
+        "mail_mail_to_user_user_id_fk": {
+          "name": "mail_mail_to_user_user_id_fk",
           "tableFrom": "mail",
           "tableTo": "user",
           "columnsFrom": [
-            "mail_to"
+            "mail_to_user"
           ],
           "columnsTo": [
             "id"
@@ -160,6 +196,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "password_hash": {
           "name": "password_hash",
           "type": "text",
@@ -194,6 +237,27 @@
           "name": "user_username_unique",
           "columns": [
             "username"
+          ],
+          "isUnique": true
+        },
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "columns": [
+            "email"
+          ],
+          "isUnique": true
+        },
+        "name_idx": {
+          "name": "name_idx",
+          "columns": [
+            "username"
+          ],
+          "isUnique": true
+        },
+        "email_idx": {
+          "name": "email_idx",
+          "columns": [
+            "email"
           ],
           "isUnique": true
         }

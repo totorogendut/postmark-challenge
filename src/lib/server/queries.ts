@@ -7,8 +7,7 @@ export const getMailCategories = async (userId: string) =>
 		.select()
 		.from(mailCategoryView)
 		.where(eq(mailCategoryView.user, userId))
-		.limit(1)
-		.run();
+		.limit(1);
 
 interface MailQueryOpts {
 	limit?: number;
@@ -22,8 +21,7 @@ export const getMailInbox = async (
 	return db
 		.select()
 		.from(mail)
-		.where(eq(mail.mailTo, userId))
+		.where(eq(mail.mailToUser, userId))
 		.orderBy(opts?.orderBy || desc(mail.createdAt))
-		.limit(opts?.limit || 10)
-		.run();
+		.limit(opts?.limit || 10);
 };

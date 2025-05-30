@@ -3,9 +3,10 @@ import { encodeBase32LowerCase } from "@oslojs/encoding";
 import { fail, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { db } from "$lib/server/db";
-import { user } from "$lib/server/db/schemas/users";
+import { users } from "$lib/server/db/schemas/users";
 import type { Actions, PageServerLoad } from "./$types";
 import { loginUser, registerUser } from "$lib/server/auth/user";
+import { setSessionTokenCookie } from "$lib/server/auth/session";
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
@@ -23,10 +24,8 @@ export const actions: Actions = {
 		try {
 			await loginUser(username, password);
 		} catch (error) {
-			if (error instanceof Error) {
-				return fail(500, { message: error.message });
-			}
-
+			console.error(error);
+			if (error instanceof Error) return fail(500, { message: error.message });
 			return fail(500, { message: "Unknown error" });
 		}
 
@@ -40,10 +39,8 @@ export const actions: Actions = {
 		try {
 			await registerUser(username, password);
 		} catch (error) {
-			if (error instanceof Error) {
-				return fail(500, { message: error.message });
-			}
-
+			console.error(error);
+			if (error instanceof Error) return fail(500, { message: error.message });
 			return fail(500, { message: "Unknown error" });
 		}
 

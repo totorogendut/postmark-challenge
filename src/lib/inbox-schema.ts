@@ -1,14 +1,14 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 import { categories } from "./_consts";
 import { SCHEMA_CONSTS } from "./_consts";
 
-const inbox = z.object({
+export const inboxSchema = z.object({
 	summary: z
 		.string()
 		.min(SCHEMA_CONSTS.SUMMARY.min)
 		.max(SCHEMA_CONSTS.SUMMARY.max),
 	content: z.string(),
-	sender: z.email(),
+	mailFrom: z.string(),
 	subject: z.string(),
 	createdAt: z.date(),
 	category: z.object({
@@ -30,4 +30,4 @@ collaboration or sponsorship have better sentiment value.`,
 		),
 });
 
-export type Inbox = z.infer<typeof inbox>;
+export type Inbox = z.infer<typeof inboxSchema>;

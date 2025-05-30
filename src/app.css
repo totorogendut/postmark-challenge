@@ -8,13 +8,14 @@
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
 
 @theme {
-	--bg-color: oklch(0.2883 0.0228 234.71);
-	--text-color: color-mix(in oklch, white, var(--bg-color) 30%);
-	--header-color: color-mix(in oklch, white, var(--bg-color) 16%);
+	--bg-color-1: oklch(0.2883 0.0228 234.71);
+	--bg-color-2: oklch(0.3467 0.0228 239.82);
+	--text-color: color-mix(in oklch, white, var(--bg-color-1) 30%);
+	--header-color: color-mix(in oklch, white, var(--bg-color-1) 16%);
 }
 
 body {
-	background-color: var(--bg-color);
+	background-color: var(--bg-color-1);
 	color: var(--text-color);
 	font-weight: 500;
 }

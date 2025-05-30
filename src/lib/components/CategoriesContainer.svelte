@@ -1,14 +1,21 @@
 <script lang="ts">
 	import { allCategories } from '$lib/_consts';
+	import type { MailCategoryView } from '$lib/server/db/schemas/inbox';
 	import CategoryCard from './CategoryCard.svelte';
 
-	const { categories } = $props();
+	interface Props {
+		categories: MailCategoryView;
+	}
 
-	const list = $derived<Record<(typeof allCategories)[number], number>>(categories);
+	const { categories }: Props = $props();
+
+	$inspect(categories);
+
+	const list = $derived(categories);
 </script>
 
 <section class="mx-auto mt-12 flex w-full max-w-[1500px] flex-wrap gap-4 p-12">
 	{#each allCategories as category}
-		<CategoryCard {category} count={0} />
+		<CategoryCard {category} count={list} />
 	{/each}
 </section>
