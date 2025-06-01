@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e0644b9a-c16b-40f9-bbe8-f20694edfa9e",
+  "id": "89f18037-7c11-4325-a763-08490f26f5f4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "mail": {
@@ -84,8 +84,15 @@
           "notNull": false,
           "autoincrement": false
         },
-        "expires_at": {
-          "name": "expires_at",
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -103,7 +110,7 @@
         "created_at_idx": {
           "name": "created_at_idx",
           "columns": [
-            "expires_at"
+            "created_at"
           ],
           "isUnique": false
         },
@@ -224,8 +231,15 @@
           "notNull": false,
           "autoincrement": false
         },
-        "expires_at": {
-          "name": "expires_at",
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -372,7 +386,7 @@
       },
       "name": "inbox_category_view",
       "isExisting": false,
-      "definition": "SELECT\n\tmail.mail_to AS user,\n  CAST(COUNT(DISTINCT CASE WHEN value = 'sponsorship' THEN mail.id END) AS INTEGER) AS sponsorship_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'advertisement' THEN mail.id END) AS INTEGER) AS advertisement_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'promotion' THEN mail.id END) AS INTEGER) AS promotion_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'collaboration' THEN mail.id END) AS INTEGER) AS collaboration_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'relaxed' THEN mail.id END) AS INTEGER) AS relaxed_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'formal' THEN mail.id END) AS INTEGER) AS formal_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'humorous' THEN mail.id END) AS INTEGER) AS humorous_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'angry' THEN mail.id END) AS INTEGER) AS angry_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'sad' THEN mail.id END) AS INTEGER) AS sad_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'polite' THEN mail.id END) AS INTEGER) AS polite_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'individual' THEN mail.id END) AS INTEGER) AS individual_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'organization' THEN mail.id END) AS INTEGER) AS organization_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'government' THEN mail.id END) AS INTEGER) AS government_count\nFROM mail, json_each(mail.categories)\nWHERE value IN ('sponsorship', 'advertisement', 'promotion', 'collaboration', 'relaxed', 'formal', 'humorous', 'angry', 'sad', 'polite', 'individual', 'organization', 'government')\nGROUP BY mail.mail_to"
+      "definition": "SELECT\n\tmail.mail_to_user AS user,\n  CAST(COUNT(DISTINCT CASE WHEN value = 'sponsorship' THEN mail.id END) AS INTEGER) AS sponsorship_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'advertisement' THEN mail.id END) AS INTEGER) AS advertisement_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'promotion' THEN mail.id END) AS INTEGER) AS promotion_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'collaboration' THEN mail.id END) AS INTEGER) AS collaboration_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'relaxed' THEN mail.id END) AS INTEGER) AS relaxed_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'formal' THEN mail.id END) AS INTEGER) AS formal_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'humorous' THEN mail.id END) AS INTEGER) AS humorous_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'angry' THEN mail.id END) AS INTEGER) AS angry_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'sad' THEN mail.id END) AS INTEGER) AS sad_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'polite' THEN mail.id END) AS INTEGER) AS polite_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'individual' THEN mail.id END) AS INTEGER) AS individual_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'organization' THEN mail.id END) AS INTEGER) AS organization_count,\nCAST(COUNT(DISTINCT CASE WHEN value = 'government' THEN mail.id END) AS INTEGER) AS government_count\nFROM mail, json_each(mail.categories)\nWHERE value IN ('sponsorship', 'advertisement', 'promotion', 'collaboration', 'relaxed', 'formal', 'humorous', 'angry', 'sad', 'polite', 'individual', 'organization', 'government')\nGROUP BY mail.mail_to"
     }
   },
   "enums": {},

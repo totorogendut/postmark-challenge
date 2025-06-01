@@ -10,12 +10,13 @@ CREATE TABLE `mail` (
 	`mail_from_name` text,
 	`mail_to` text NOT NULL,
 	`mail_to_user` text,
-	`expires_at` integer,
+	`created_at` integer,
+	`updated_at` integer,
 	FOREIGN KEY (`mail_to_user`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE INDEX `mail_to_idc` ON `mail` (`mail_to_user`);--> statement-breakpoint
-CREATE INDEX `created_at_idx` ON `mail` (`expires_at`);--> statement-breakpoint
+CREATE INDEX `created_at_idx` ON `mail` (`created_at`);--> statement-breakpoint
 CREATE INDEX `categories_idx` ON `mail` (`categories`);--> statement-breakpoint
 CREATE TABLE `session` (
 	`id` text PRIMARY KEY NOT NULL,
@@ -31,7 +32,8 @@ CREATE TABLE `user` (
 	`password_hash` text NOT NULL,
 	`avatar` text,
 	`inbox_hash` text,
-	`expires_at` integer
+	`created_at` integer,
+	`updated_at` integer
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `user_username_unique` ON `user` (`username`);--> statement-breakpoint
@@ -39,7 +41,7 @@ CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);--> statement-breakp
 CREATE UNIQUE INDEX `name_idx` ON `user` (`username`);--> statement-breakpoint
 CREATE UNIQUE INDEX `email_idx` ON `user` (`email`);--> statement-breakpoint
 CREATE VIEW `inbox_category_view` AS SELECT
-	mail.mail_to AS user,
+	mail.mail_to_user AS user,
   CAST(COUNT(DISTINCT CASE WHEN value = 'sponsorship' THEN mail.id END) AS INTEGER) AS sponsorship_count,
 CAST(COUNT(DISTINCT CASE WHEN value = 'advertisement' THEN mail.id END) AS INTEGER) AS advertisement_count,
 CAST(COUNT(DISTINCT CASE WHEN value = 'promotion' THEN mail.id END) AS INTEGER) AS promotion_count,

@@ -1,21 +1,31 @@
 import { demoData } from './_demo';
 import type { Inbox } from './inbox-schema';
+import type { Mail as MailSchema } from '$lib/server/db/schemas/inbox';
+import type { User as UserSchema } from '$lib/server/db/schemas/users';
 
-export const user = $state({
-	name: demoData.user.name,
-	email: demoData.user.email,
-	avatar: demoData.user.avatar
-});
+class User {
+	name = $state(demoData.user.name);
+	email = $state(demoData.user.email);
+	avatar = $state(demoData.user.avatar);
+	inboxHash = $state('');
 
-type ColumnData = Array<Partial<Mail>[]>;
-export class Mail {
-	inboxList = $state<Inbox[]>([]);
+	constructor(opts?: Partial<UserSchema>) {
+		if (opts?.username) this.name = opts.username;
+		if (opts?.email) this.email = opts.email;
+		if (opts?.avatar) this.avatar = opts.avatar;
+		if (opts?.inboxHash) this.inboxHash = opts.inboxHash;
+	}
+}
+
+type ColumnData = MailSchema[];
+class Mail {
+	inboxList = $state<MailSchema[]>([]);
 	columns = $state(3);
 	db = $state({
 		cursor: 0
 	});
 
-	columnsData = $derived.by<Array<ColumnData[]>>(() => {
+	columnsData = $derived.by(() => {
 		const columnGroup: Array<ColumnData> = [];
 		const columnHeight: number[] = Array(this.columns).fill(0);
 		if (!this.inboxList?.length) return columnGroup;
@@ -30,10 +40,11 @@ export class Mail {
 		return columnGroup;
 	});
 
-	init(inbox: Inbox[]) {
+	init(inbox: MailSchema[]) {
 		this.inboxList = inbox;
 		this.db.cursor = inbox.length;
 	}
 }
 
 export const mails = new Mail();
+export const user = new User();

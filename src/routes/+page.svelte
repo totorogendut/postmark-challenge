@@ -3,6 +3,7 @@
 	import MailInboxContainer from '$lib/components/MailInboxContainer.svelte';
 	import { user } from '$lib/store.svelte';
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
+	import type { MailCategoryView } from '$lib/server/db/schemas/inbox';
 
 	const mailCount = 4;
 	const { data } = $props();

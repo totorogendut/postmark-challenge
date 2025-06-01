@@ -1,10 +1,8 @@
-import { integer } from "drizzle-orm/sqlite-core";
+import { integer, text } from 'drizzle-orm/sqlite-core';
 
 export const BASE_TABLE = {
-	createdAt: integer("expires_at", { mode: "timestamp" }).$defaultFn(
-		() => new Date(),
-	),
-	updatedAt: integer("expires_at", { mode: "timestamp" })
+	createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+	updatedAt: integer('updated_at', { mode: 'timestamp' })
 		.$defaultFn(() => new Date())
-		.$onUpdateFn(() => new Date()),
+		.$onUpdateFn(() => new Date())
 };
