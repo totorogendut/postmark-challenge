@@ -7,23 +7,24 @@ import { fail } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
 import { users as userSchema } from "$lib/server/db/schemas/users";
 import { eq } from "drizzle-orm";
-import {
-	mail,
-	mail as mailSchema,
-	type Mail,
-} from "$lib/server/db/schemas/inbox";
-import {
-	postmarkWebhookSchema,
-	type PostmarkWebhook,
-} from "$lib/server/postmark/schema";
+import { mail, type Mail } from "$lib/server/db/schemas/inbox";
+import { postmarkWebhookSchema, type PostmarkWebhook } from "$lib/server/postmark/schema";
+
+interface Props {}
 
 const model = openai("gpt-4.1-nano", {
 	structuredOutputs: true,
 });
 
-export const GET = (async (req: RequestHandler): Promise<Response> => {
-	const webhook: PostmarkWebhook = await req.json();
-	const textBody = webhook.TextBody;
+export const GET = (async ({ request }): Promise<Response> => {
+	const webhook: PostmarkWebhook = await request.json();
+	const {
+		TextBody: textBody,
+		Subject: subject,
+		MailboxHash,
+		From: mailFrom,
+		FromName: mailFromName,
+	} = webhook;
 
 	if (!textBody)
 		return new Response("Webhook data parsing failed", {
@@ -32,10 +33,7 @@ export const GET = (async (req: RequestHandler): Promise<Response> => {
 		});
 
 	const inboxHash = "12314";
-	const [user] = await db
-		.select()
-		.from(userSchema)
-		.where(eq(userSchema.inboxHash, inboxHash));
+	const [user] = await db.select().from(userSchema).where(eq(userSchema.inboxHash, inboxHash));
 
 	if (!user)
 		return new Response("No user found", {
@@ -56,7 +54,18 @@ export const GET = (async (req: RequestHandler): Promise<Response> => {
 
 	try {
 		inboxSchema.parse(object);
-		await db.insert(mail).values(object as Mail);
+		const categories: string[] = Object.values(object.category).flat() || [];
+		const { summary } = object;
+		await db.insert(mail).values({
+			mailToUser: user.id,
+			mailTo: user.email,
+			categories,
+			subject,
+			mailFrom,
+			mailFromName,
+			textBody,
+			summary,
+		});
 	} catch (error) {
 		return new Response("Parsed object failed", {
 			status: 500,
@@ -64,5 +73,5 @@ export const GET = (async (req: RequestHandler): Promise<Response> => {
 		});
 	}
 
-	return new Response("");
+	return new Response("ok");
 }) satisfies RequestHandler;

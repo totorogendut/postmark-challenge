@@ -1,5 +1,9 @@
 <script lang="ts">
-	function loadMore() {}
+	import { mails } from "$lib/store.svelte";
+
+	async function loadMore() {
+		await mails.get();
+	}
 </script>
 
 <div class="mb-12 flex justify-center">

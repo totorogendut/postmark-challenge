@@ -1,13 +1,17 @@
-import { demoData } from './_demo';
-import type { Inbox } from './inbox-schema';
-import type { Mail as MailSchema } from '$lib/server/db/schemas/inbox';
-import type { User as UserSchema } from '$lib/server/db/schemas/users';
+import { demoData } from "./_demo";
+import type { Inbox } from "./inbox-schema";
+import type { Mail as MailSchema } from "$lib/server/db/schemas/inbox";
+import type { User as UserSchema } from "$lib/server/db/schemas/users";
+import { SvelteSet } from "svelte/reactivity";
+import { defaultInboxQuery, type allCategories } from "./_consts";
+import { postAction } from "./actions";
+import { untrack } from "svelte";
 
 class User {
 	name = $state(demoData.user.name);
 	email = $state(demoData.user.email);
 	avatar = $state(demoData.user.avatar);
-	inboxHash = $state('');
+	inboxHash = $state("");
 
 	constructor(opts?: Partial<UserSchema>) {
 		if (opts?.username) this.name = opts.username;
@@ -21,8 +25,11 @@ type ColumnData = MailSchema[];
 class Mail {
 	inboxList = $state<MailSchema[]>([]);
 	columns = $state(3);
-	db = $state({
-		cursor: 0
+	queryOpts = $state(defaultInboxQuery);
+	selectedCategories = new SvelteSet();
+	loading = $state(false);
+	state = $state({
+		onlyUnread: false,
 	});
 
 	columnsData = $derived.by(() => {
@@ -40,9 +47,47 @@ class Mail {
 		return columnGroup;
 	});
 
-	init(inbox: MailSchema[]) {
-		this.inboxList = inbox;
-		this.db.cursor = inbox.length;
+	insert(inbox: MailSchema[]) {
+		this.inboxList.push(...inbox);
+		this.queryOpts.offset += inbox.length;
+	}
+
+	toggleCategory(category: (typeof allCategories)[number]) {
+		if (this.selectedCategories.has(category)) {
+			this.selectedCategories.delete(category);
+		} else {
+			this.selectedCategories.add(category);
+		}
+
+		this.reset();
+		this.get();
+	}
+
+	reset() {
+		this.inboxList = [];
+		this.queryOpts = defaultInboxQuery;
+	}
+
+	async get() {
+		this.loading = true;
+		try {
+			const res = await postAction("/api/inbox/", {
+				...this.queryOpts,
+				...(this.state.onlyUnread ? { hasRead: false } : {}),
+				categories: Array.from(this.selectedCategories),
+			});
+
+			if (!res.ok) return;
+			const json = await res.json();
+			if (!json[0]?.createdAt) throw new Error("failed decoding json on inbox fetch");
+			untrack(() => {
+				this.insert(json as MailSchema[]);
+			});
+		} catch (error) {
+			console.error(error);
+		} finally {
+			this.loading = false;
+		}
 	}
 }
 

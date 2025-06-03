@@ -3,14 +3,11 @@ import { categories } from "./_consts";
 import { SCHEMA_CONSTS } from "./_consts";
 
 export const inboxSchema = z.object({
-	summary: z
-		.string()
-		.min(SCHEMA_CONSTS.SUMMARY.min)
-		.max(SCHEMA_CONSTS.SUMMARY.max),
-	content: z.string(),
+	summary: z.string().min(SCHEMA_CONSTS.SUMMARY.min).max(SCHEMA_CONSTS.SUMMARY.max),
 	mailFrom: z.string(),
 	subject: z.string(),
-	createdAt: z.date(),
+	textBody: z.string(),
+	// createdAt: z.date(),
 	category: z.object({
 		business: z.enum(categories.business),
 		tone: z.enum(categories.tone),
