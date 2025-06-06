@@ -1,54 +1,50 @@
-import { allCategories, type categories } from '../../../_consts';
-import { index, integer, sqliteTable, sqliteView, text } from 'drizzle-orm/sqlite-core';
-import { BASE_TABLE } from './_shared';
-import { nanoid } from 'nanoid';
-import { users } from './users';
-import { relations, sql } from 'drizzle-orm';
+import { allCategories, type categories } from "../../../_consts";
+import { index, integer, sqliteTable, sqliteView, text } from "drizzle-orm/sqlite-core";
+import { BASE_TABLE } from "./_shared";
+import { nanoid } from "nanoid";
+import { users } from "./users";
+import { relations, sql } from "drizzle-orm";
 
-interface MailCategory {
-	business: Array<typeof categories.business>;
-	tone: Array<typeof categories.tone>;
-	senderIdentity: Array<typeof categories.senderIdentity>;
-}
+export type MailCategory = (typeof allCategories)[number][];
 
 export const mail = sqliteTable(
-	'mail',
+	"mail",
 	{
-		id: text('id')
+		id: text("id")
 			.primaryKey()
 			.$defaultFn(() => nanoid()),
-		summary: text('summarry'),
-		subject: text('subject'),
-		textBody: text('text_body'),
-		hasRead: integer('has_read', { mode: 'boolean' }).$default(() => false),
-		categories: text('categories', { mode: 'json' }).$type<MailCategory>(),
-		sentiment: integer('sentiment'),
-		mailFrom: text('mail_from').notNull(),
-		mailFromName: text('mail_from_name'),
-		mailTo: text('mail_to').notNull(),
-		mailToUser: text('mail_to_user').references(() => users.id),
-		...BASE_TABLE
+		summary: text("summarry"),
+		subject: text("subject"),
+		textBody: text("text_body"),
+		hasRead: integer("has_read", { mode: "boolean" }).$default(() => false),
+		categories: text("categories", { mode: "json" }).$type<MailCategory>(),
+		sentiment: integer("sentiment"),
+		mailFrom: text("mail_from").notNull(),
+		mailFromName: text("mail_from_name"),
+		mailTo: text("mail_to").notNull(),
+		mailToUser: text("mail_to_user").references(() => users.id),
+		...BASE_TABLE,
 	},
 	(table) => [
-		index('mail_to_idc').on(table.mailToUser),
-		index('created_at_idx').on(table.createdAt),
-		index('categories_idx').on(table.categories)
-	]
+		index("mail_to_idc").on(table.mailToUser),
+		index("created_at_idx").on(table.createdAt),
+		index("categories_idx").on(table.categories),
+	],
 );
 
 export const mailRelations = relations(mail, ({ one }) => ({
-	mailToUser: one(users, { fields: [mail.mailToUser], references: [users.id] })
+	mailToUser: one(users, { fields: [mail.mailToUser], references: [users.id] }),
 }));
 
 const mailViewColumns = {
-	user: text('user'),
+	user: text("user"),
 	...allCategories.reduce(
 		(obj, category) => {
 			obj[category] = integer(`${category}_count`).notNull();
 			return obj;
 		},
-		{} as Record<string, ReturnType<typeof integer>>
-	)
+		{} as Record<string, ReturnType<typeof integer>>,
+	),
 };
 
 const countSql = (category: string) =>
@@ -56,12 +52,12 @@ const countSql = (category: string) =>
 
 const viewSql = sql.raw(`SELECT
 	mail.mail_to_user AS user,
-  ${allCategories.map(countSql).join(',\n')}
+  ${allCategories.map(countSql).join(",\n")}
 FROM mail, json_each(mail.categories)
-WHERE value IN (${allCategories.map((c) => `'${c}'`).join(', ')})
+WHERE value IN (${allCategories.map((c) => `'${c}'`).join(", ")})
 GROUP BY mail.mail_to`);
 
-export const mailCategoryView = sqliteView('inbox_category_view', mailViewColumns).as(viewSql);
+export const mailCategoryView = sqliteView("inbox_category_view", mailViewColumns).as(viewSql);
 
 export type Mail = typeof mail.$inferSelect;
 export type MailCategoryView = typeof mailCategoryView.$inferSelect & {

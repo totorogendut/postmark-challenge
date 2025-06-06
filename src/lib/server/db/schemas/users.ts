@@ -1,10 +1,4 @@
-import {
-	sqliteTable,
-	text,
-	integer,
-	index,
-	uniqueIndex,
-} from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, index, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { BASE_TABLE } from "./_shared";
 import { relations } from "drizzle-orm";
 import { mail, mailCategoryView } from "./inbox";
@@ -18,13 +12,10 @@ export const users = sqliteTable(
 		email: text("email").unique(),
 		passwordHash: text("password_hash").notNull(),
 		avatar: text("avatar"),
-		inboxHash: text("inbox_hash").$defaultFn(() => nanoid()),
+		mailboxHash: text("mailbox_hash"),
 		...BASE_TABLE,
 	},
-	(table) => [
-		uniqueIndex("name_idx").on(table.username),
-		uniqueIndex("email_idx").on(table.email),
-	],
+	(table) => [uniqueIndex("name_idx").on(table.username), uniqueIndex("email_idx").on(table.email)],
 );
 
 export const userRelations = relations(users, ({ many, one }) => ({

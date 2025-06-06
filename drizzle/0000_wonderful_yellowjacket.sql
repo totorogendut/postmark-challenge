@@ -31,7 +31,7 @@ CREATE TABLE `user` (
 	`email` text,
 	`password_hash` text NOT NULL,
 	`avatar` text,
-	`inbox_hash` text,
+	`mailbox_hash` text,
 	`created_at` integer,
 	`updated_at` integer
 );

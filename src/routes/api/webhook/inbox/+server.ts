@@ -6,9 +6,10 @@ import { openai } from "@ai-sdk/openai";
 import { fail } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
 import { users as userSchema } from "$lib/server/db/schemas/users";
-import { eq } from "drizzle-orm";
-import { mail, type Mail } from "$lib/server/db/schemas/inbox";
+import { eq, SQL } from "drizzle-orm";
+import { mail, type Mail, type MailCategory } from "$lib/server/db/schemas/inbox";
 import { postmarkWebhookSchema, type PostmarkWebhook } from "$lib/server/postmark/schema";
+import type { allCategories } from "$lib/_consts";
 
 interface Props {}
 
@@ -21,7 +22,7 @@ export const GET = (async ({ request }): Promise<Response> => {
 	const {
 		TextBody: textBody,
 		Subject: subject,
-		MailboxHash,
+		MailboxHash: mailboxHash,
 		From: mailFrom,
 		FromName: mailFromName,
 	} = webhook;
@@ -32,8 +33,7 @@ export const GET = (async ({ request }): Promise<Response> => {
 			statusText: "Failed to parse webhook data.",
 		});
 
-	const inboxHash = "12314";
-	const [user] = await db.select().from(userSchema).where(eq(userSchema.inboxHash, inboxHash));
+	const [user] = await db.select().from(userSchema).where(eq(userSchema.mailboxHash, mailboxHash));
 
 	if (!user)
 		return new Response("No user found", {
@@ -54,11 +54,11 @@ export const GET = (async ({ request }): Promise<Response> => {
 
 	try {
 		inboxSchema.parse(object);
-		const categories: string[] = Object.values(object.category).flat() || [];
+		const categories: MailCategory = Object.values(object.category).flat() || [];
 		const { summary } = object;
 		await db.insert(mail).values({
 			mailToUser: user.id,
-			mailTo: user.email,
+			mailTo: user.email || "",
 			categories,
 			subject,
 			mailFrom,

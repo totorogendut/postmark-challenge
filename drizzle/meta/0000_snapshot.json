@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "89f18037-7c11-4325-a763-08490f26f5f4",
+  "id": "3f3ee362-b305-401f-976d-1b159f8cc3e2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "mail": {
@@ -224,8 +224,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "inbox_hash": {
-          "name": "inbox_hash",
+        "mailbox_hash": {
+          "name": "mailbox_hash",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

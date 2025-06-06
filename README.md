@@ -1,38 +1,37 @@
-# sv
+# SnipMail
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A simple web app that summarize and categorize email inbox with the help of LLM like ChatGPT, Gemini, or Claude.
 
-## Creating a project
+## Prequisite
 
-If you're seeing this, you've probably already done this step. Congrats!
+This project uses [Bun](https://bun.sh/) to develop and building the source code. 
+
+## Backend Setup
+
+The backend uses SQLite as the database with Drizzle as ORM. By default it uses `better-sqlite3` under the hood but you can make adjustment it on `drizzle.config.ts` config file and `src/lib/server/db/index.ts`.
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+# Generate SQLite .db file and push DB tables and schema
+bunx drizzle-kit generate
+bunx drizzle-kit push
 ```
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Running a dev server requires setting up database first.
 
 ```bash
-npm run dev
+bun run dev
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+# Optionally, to populate database with seeds (after registering first user)
+bun seeds/populate.ts # NOTE: if better_sqlite3 throwing error uses
+                      # tsx instead (https://tsx.is/)
 ```
+
+For development, you can setup remote tunnel or publicly forwarding the port on `5173` to expose the API for the purpose of receiving webhook from Postmark. The endpoint for receiving webhook is `/api/webhook/inbox`.
 
 ## Building
 
-To create a production version of your app:
-
 ```bash
-npm run build
+bun run build
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
