@@ -4,6 +4,8 @@ import * as mailsSchema from "./schemas/inbox";
 import { env } from "$env/dynamic/private";
 import { createClient } from "@libsql/client";
 
+console.log(env);
+
 const client = createClient({
 	url: env.DATABASE_URL,
 	authToken: env.DATABASE_AUTH_TOKEN,
