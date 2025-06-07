@@ -1,5 +1,5 @@
 # --- Stage 1: Build with Bun ---
-FROM oven/bun:1 AS builder
+FROM oven/bun:latest AS builder
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ COPY . .
 RUN bun run build
 
 # --- Stage 2: Runtime with Bun ---
-FROM oven/bun:1
+FROM oven/bun:latest
 
 WORKDIR /app
 
