@@ -1,11 +1,12 @@
 import { encodeBase32LowerCase } from "@oslojs/encoding";
 import { fail } from "@sveltejs/kit";
-import { hash, verify } from "@node-rs/argon2";
+// import { hash, verify } from "@node-rs/argon2";
 import { db } from "../db";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "./session";
 import { getRequestEvent } from "$app/server";
 import { users } from "../db/schemas/users";
 import { eq } from "drizzle-orm";
+import { hashPassword, verifyPassword } from "./_shared";
 
 export async function registerUser(username: string, password: string) {
 	const event = getRequestEvent();
@@ -13,13 +14,14 @@ export async function registerUser(username: string, password: string) {
 	if (!validatePassword(password)) throw new Error("Invalid password");
 
 	const userId = generateUserId();
-	const passwordHash = await hash(password, {
-		// recommended minimum parameters
-		memoryCost: 19456,
-		timeCost: 2,
-		outputLen: 32,
-		parallelism: 1,
-	});
+	// const passwordHash = await hash(password, {
+	// 	// recommended minimum parameters
+	// 	memoryCost: 19456,
+	// 	timeCost: 2,
+	// 	outputLen: 32,
+	// 	parallelism: 1,
+	// });
+	const passwordHash = await hashPassword(password);
 
 	try {
 		const [user] = await db
@@ -49,12 +51,13 @@ export async function loginUser(username: string, password: string) {
 		throw new Error("Incorrect username or password");
 	}
 
-	const validPassword = await verify(user.passwordHash, password, {
-		memoryCost: 19456,
-		timeCost: 2,
-		outputLen: 32,
-		parallelism: 1,
-	});
+	// const validPassword = await verify(user.passwordHash, password, {
+	// 	memoryCost: 19456,
+	// 	timeCost: 2,
+	// 	outputLen: 32,
+	// 	parallelism: 1,
+	// });
+	const validPassword = await verifyPassword(password, user.passwordHash);
 	if (!validPassword) {
 		throw new Error("Incorrect username or password");
 	}
