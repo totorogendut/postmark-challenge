@@ -4,6 +4,7 @@
 	import { user } from "$lib/store.svelte";
 	import { Avatar } from "@skeletonlabs/skeleton-svelte";
 	import type { MailCategoryView } from "$lib/server/db/schemas/inbox";
+	import InboxEmailAddress from "$lib/components/InboxEmailAddress.svelte";
 
 	const mailCount = 4;
 	const { data } = $props();
@@ -19,7 +20,10 @@
 	/>
 	<div class="flex flex-col gap-2">
 		<h1 class="text-7xl font-extrabold">Good Morning, {user.data?.username}</h1>
-		<strong class="text-2xl font-medium">We organized your inbox below</strong>
+		<div class="flex justify-between">
+			<strong class="text-2xl font-medium">We organized your inbox below</strong>
+			<InboxEmailAddress />
+		</div>
 	</div>
 </header>
 

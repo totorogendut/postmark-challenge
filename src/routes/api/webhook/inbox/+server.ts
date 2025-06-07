@@ -17,11 +17,10 @@ export const GET = (async ({ request }): Promise<Response> => {
 	const {
 		TextBody: textBody,
 		Subject: subject,
-		ToFull,
+		MailboxHash,
 		From: mailFrom,
 		FromName: mailFromName,
 	} = webhook;
-	const [{ Email }] = ToFull;
 
 	if (!textBody)
 		return new Response("Webhook data parsing failed", {
@@ -29,7 +28,7 @@ export const GET = (async ({ request }): Promise<Response> => {
 			statusText: "Failed to parse webhook data.",
 		});
 
-	const [user] = await db.select().from(userSchema).where(eq(userSchema.email, Email));
+	const [user] = await db.select().from(userSchema).where(eq(userSchema.id, MailboxHash));
 
 	if (!user)
 		return new Response("No user found", {

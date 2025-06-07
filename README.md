@@ -16,6 +16,20 @@ bun run db:generate
 bun run db:push
 ```
 
+## Env variables
+
+```
+DATABASE_URL=local.db # database if the db driver needs it
+POSTMARK_INBOUND_EMAIL_ADDRESS=yourinboundhash@inbound.postmarkapp.com
+
+# NOTE: only fill in API keys for LLM you're intending to use,
+# otherwise, leave them blank so the unused LLM will be filtered out
+# in the server runtime.
+ANTHROPIC_API_KEY=XXXXXXXXXXXXX
+OPENAI_API_KEY=XXXXXXXXXXXx
+GEMINI_API_KEY=     # Blank API key will be filtered out
+```
+
 ## Developing
 
 Running a dev server requires setting up database first.

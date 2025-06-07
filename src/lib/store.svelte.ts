@@ -31,6 +31,8 @@ type ColumnData = MailSchema[];
 interface MailState {
 	onlyUnread: boolean;
 	orderBy: "createdAt" | "sentiment";
+	maxFraudIndicator: number;
+	maxSpamIndicator: number;
 }
 class Mail {
 	inboxList = $state<MailSchema[]>([]);
@@ -41,6 +43,8 @@ class Mail {
 	state = $state<MailState>({
 		onlyUnread: false,
 		orderBy: "createdAt",
+		maxFraudIndicator: 25,
+		maxSpamIndicator: 25,
 	});
 
 	columnsData = $derived.by(() => {
@@ -84,8 +88,8 @@ class Mail {
 		try {
 			const res = await postAction("/api/inbox/", {
 				...this.queryOpts,
+				...this.state,
 				...(this.state.onlyUnread ? { hasRead: false } : {}),
-				orderBy: this.state.orderBy,
 				categories: Array.from(this.selectedCategories),
 			});
 

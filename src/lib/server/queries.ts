@@ -1,4 +1,4 @@
-import { and, desc, eq, ilike, sql, type SQL } from "drizzle-orm";
+import { and, desc, eq, ilike, lte, sql, type SQL } from "drizzle-orm";
 import { db } from "./db";
 import { mail, mailCategoryView, type MailCategoryView } from "./db/schemas/inbox";
 import { getRequestEvent } from "$app/server";
@@ -13,11 +13,17 @@ interface MailQueryOpts {
 	orderBy?: string;
 	hasRead?: boolean;
 	categories?: string[];
+	maxFraudIndicator?: number;
+	maxSpamIndicator?: number;
 }
 
 export const getMailInbox = async (opts?: Partial<MailQueryOpts>) => {
 	const { locals } = getRequestEvent();
-	const conditions: SQL<unknown>[] = [eq(mail.mailToUser, locals.user.id)];
+	const conditions: SQL<unknown>[] = [
+		eq(mail.mailToUser, locals.user.id),
+		lte(mail.fraudIndicator, opts?.maxFraudIndicator || 25),
+		lte(mail.spamIndicator, opts?.maxSpamIndicator || 25),
+	];
 	if (opts?.hasRead !== undefined) conditions.push(eq(mail.hasRead, opts.hasRead));
 	if (opts?.categories?.length && opts?.categories) {
 		conditions.push(arrayContains(mail.categories, opts.categories));
