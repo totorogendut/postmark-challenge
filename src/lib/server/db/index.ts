@@ -1,13 +1,15 @@
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/libsql";
 import * as usersSchema from "./schemas/users";
 import * as mailsSchema from "./schemas/inbox";
-import { env } from "$env/dynamic/private";
+import { DATABASE_AUTH_TOKEN, DATABASE_URL } from "$env/static/private";
+import { createClient } from "@libsql/client";
 
-if (!env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
+const client = createClient({
+	url: DATABASE_URL,
+	authToken: DATABASE_AUTH_TOKEN,
+});
 
-const client = new Database(env.DATABASE_URL);
-
-export const db = drizzle(client, {
+export const db = drizzle({
 	schema: { ...usersSchema, ...mailsSchema },
+	client,
 });
