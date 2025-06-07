@@ -1,12 +1,12 @@
 import { drizzle } from "drizzle-orm/libsql";
 import * as usersSchema from "./schemas/users";
 import * as mailsSchema from "./schemas/inbox";
-import { DATABASE_AUTH_TOKEN, DATABASE_URL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { createClient } from "@libsql/client";
 
 const client = createClient({
-	url: DATABASE_URL,
-	authToken: DATABASE_AUTH_TOKEN,
+	url: env.DATABASE_URL,
+	authToken: env.DATABASE_AUTH_TOKEN,
 });
 
 export const db = drizzle({

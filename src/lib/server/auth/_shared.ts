@@ -54,7 +54,7 @@ export async function verifyPassword(password: string, storedHash: string): Prom
 
 	const derivedHash = new Uint8Array(derivedBits);
 
-	return crypto.timingSafeEqual
-		? crypto.timingSafeEqual(derivedHash, hash)
+	return (crypto as any).timingSafeEqual
+		? (crypto as any).timingSafeEqual(derivedHash, hash)
 		: derivedHash.every((b, i) => b === hash[i]);
 }

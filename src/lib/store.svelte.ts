@@ -7,7 +7,7 @@ import { defaultInboxQuery, type allCategories } from "./_consts";
 import { postAction } from "./actions";
 import { untrack } from "svelte";
 import { minidenticon } from "minidenticons";
-import { PUBLIC_POSTMARK_INBOUND_EMAIL_ADDRESS } from "$env/static/public";
+import { env } from "$env/dynamic/public";
 
 class User {
 	data = $state({
@@ -18,7 +18,7 @@ class User {
 	});
 
 	inboundEmailAddress = $derived(
-		(PUBLIC_POSTMARK_INBOUND_EMAIL_ADDRESS || "").split("@").join(`+${this.data?.id}@`),
+		(env.PUBLIC_POSTMARK_INBOUND_EMAIL_ADDRESS || "").split("@").join(`+${this.data?.id}@`),
 	);
 
 	avatarURL = $derived(
