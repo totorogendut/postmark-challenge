@@ -4,27 +4,6 @@
 	"compatibility_date": "2025-01-01",
 	"assets": {
 		"binding": "ASSETS",
-		"directory": ".svelte-kit/cloudflare",
-	},
-	"migrations": [
-		{
-			"tag": "v1",
-			"new_sqlite_classes": ["SnipMailDurableObjectV1"],
-		},
-	],
-	"rules": [
-		{
-			"type": "Text",
-			"globs": ["**/*.sql"],
-			"fallthrough": true,
-		},
-	],
-	"vars": {
-		"DATABASE_URL": "libsql://xxxx",
-		"DATABASE_AUTH_TOKEN": "xxxx",
-		"POSTMARK_INBOUND_EMAIL_ADDRESS": "yourinboundhash@inbound.postmarkapp.com",
-		"GEMINI_API_KEY": "",
-		"ANTHROPIC_API_KEY": "",
-		"OPENAI_API_KEY": "",
-	},
+		"directory": ".svelte-kit/cloudflare"
+	}
 }
