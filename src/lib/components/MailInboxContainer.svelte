@@ -12,7 +12,10 @@
 	}
 	const { inbox }: Props = $props();
 	onMount(() => {
-		if (inbox) mails.insert(inbox);
+		if (inbox) {
+			mails.reset();
+			mails.insert(inbox);
+		}
 	});
 </script>
 

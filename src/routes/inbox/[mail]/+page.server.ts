@@ -5,7 +5,6 @@ import { mail } from "$lib/server/db/schemas/inbox";
 import { eq } from "drizzle-orm";
 
 export const load = (async ({ locals, params }) => {
-	if (!locals.user) return;
 	const mailId = params.mail;
 
 	const [result] = await db.select().from(mail).where(eq(mail.id, mailId)).limit(1);
@@ -13,7 +12,7 @@ export const load = (async ({ locals, params }) => {
 	if (!result) return fail(404, { messages: "Email not found" });
 
 	if (!result.hasRead) {
-		await db.update(mail).set({ hasRead: true }).where(eq(mail.id, mailId)).limit(1);
+		db.update(mail).set({ hasRead: true }).where(eq(mail.id, mailId)).limit(1);
 	}
 
 	return {
