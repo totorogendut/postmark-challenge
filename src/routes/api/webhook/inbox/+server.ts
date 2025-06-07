@@ -12,7 +12,7 @@ import { postmarkWebhookSchema, type PostmarkWebhook } from "$lib/server/postmar
 import type { allCategories } from "$lib/_consts";
 import { getRandomLLM } from "$lib/server/ai";
 
-export const GET = (async ({ request }): Promise<Response> => {
+export const POST = (async ({ request }): Promise<Response> => {
 	const webhook: PostmarkWebhook = await request.json();
 	const {
 		TextBody: textBody,
