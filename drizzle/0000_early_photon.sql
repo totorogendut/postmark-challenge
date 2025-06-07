@@ -6,6 +6,8 @@ CREATE TABLE `mail` (
 	`has_read` integer,
 	`categories` text,
 	`sentiment` integer,
+	`fraud_indicator` integer,
+	`spam_indicator` integer,
 	`mail_from` text NOT NULL,
 	`mail_from_name` text,
 	`mail_to` text NOT NULL,
@@ -17,6 +19,9 @@ CREATE TABLE `mail` (
 --> statement-breakpoint
 CREATE INDEX `mail_to_idc` ON `mail` (`mail_to_user`);--> statement-breakpoint
 CREATE INDEX `created_at_idx` ON `mail` (`created_at`);--> statement-breakpoint
+CREATE INDEX `sentiment_idx` ON `mail` (`sentiment`);--> statement-breakpoint
+CREATE INDEX `fraud_indicator_idx` ON `mail` (`fraud_indicator`);--> statement-breakpoint
+CREATE INDEX `spam_indicator_idx` ON `mail` (`spam_indicator`);--> statement-breakpoint
 CREATE INDEX `categories_idx` ON `mail` (`categories`);--> statement-breakpoint
 CREATE TABLE `session` (
 	`id` text PRIMARY KEY NOT NULL,

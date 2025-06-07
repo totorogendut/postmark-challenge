@@ -15,10 +15,10 @@
 		width="128"
 		height="128"
 		src={user.avatarURL}
-		alt={user.data.username}
+		alt={user.data?.username}
 	/>
 	<div class="flex flex-col gap-2">
-		<h1 class="text-7xl font-extrabold">Good Morning, {user.data.username}</h1>
+		<h1 class="text-7xl font-extrabold">Good Morning, {user.data?.username}</h1>
 		<strong class="text-2xl font-medium">We organized your inbox below</strong>
 	</div>
 </header>

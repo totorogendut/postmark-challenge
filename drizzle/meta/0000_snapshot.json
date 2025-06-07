@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "bbc06654-6387-48c3-9690-2391c0867ade",
+  "id": "6e459737-254a-42b0-87f4-3996a635a3d1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "mail": {
@@ -51,6 +51,20 @@
         },
         "sentiment": {
           "name": "sentiment",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "fraud_indicator": {
+          "name": "fraud_indicator",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spam_indicator": {
+          "name": "spam_indicator",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -111,6 +125,27 @@
           "name": "created_at_idx",
           "columns": [
             "created_at"
+          ],
+          "isUnique": false
+        },
+        "sentiment_idx": {
+          "name": "sentiment_idx",
+          "columns": [
+            "sentiment"
+          ],
+          "isUnique": false
+        },
+        "fraud_indicator_idx": {
+          "name": "fraud_indicator_idx",
+          "columns": [
+            "fraud_indicator"
+          ],
+          "isUnique": false
+        },
+        "spam_indicator_idx": {
+          "name": "spam_indicator_idx",
+          "columns": [
+            "spam_indicator"
           ],
           "isUnique": false
         },

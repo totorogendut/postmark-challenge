@@ -8,10 +8,10 @@ import type { Actions, PageServerLoad } from "./$types";
 import { loginUser, registerUser } from "$lib/server/auth/user";
 import { setSessionTokenCookie } from "$lib/server/auth/session";
 
-export const load: PageServerLoad = async (event) => {
-	if (event.locals.user) {
-		return redirect(302, "/");
-	}
+export const load: PageServerLoad = async ({ locals, request }) => {
+	// if (locals.user) {
+	// 	return redirect(302, "/");
+	// }
 	return {};
 };
 
@@ -22,14 +22,20 @@ export const actions: Actions = {
 		const password = formData.get("password") as string;
 
 		try {
-			await loginUser(username, password);
+			const { avatar, id, email } = await loginUser(username, password);
+			return {
+				user: {
+					username,
+					id,
+					avatar: avatar || "",
+					email: email || "",
+				},
+			};
 		} catch (error) {
 			console.error(error);
 			if (error instanceof Error) return fail(500, { message: error.message });
 			return fail(500, { message: "Unknown error" });
 		}
-
-		return redirect(302, "/");
 	},
 	register: async (event) => {
 		const formData = await event.request.formData();
@@ -37,13 +43,19 @@ export const actions: Actions = {
 		const password = formData.get("password") as string;
 
 		try {
-			await registerUser(username, password);
+			const { avatar, id, email } = await registerUser(username, password);
+			return {
+				user: {
+					username,
+					id,
+					avatar: avatar || "",
+					email: email || "",
+				},
+			};
 		} catch (error) {
 			console.error(error);
 			if (error instanceof Error) return fail(500, { message: error.message });
 			return fail(500, { message: "Unknown error" });
 		}
-
-		return redirect(302, "/");
 	},
 };

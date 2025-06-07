@@ -1,9 +1,20 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { ArrowLeft } from 'lucide-svelte';
-	import type { ActionData } from './$types';
+	import { enhance } from "$app/forms";
+	import { ArrowLeft } from "lucide-svelte";
+	import type { ActionData } from "./$types";
+	import { untrack } from "svelte";
+	import { user } from "$lib/store.svelte";
+	import { goto } from "$app/navigation";
 
 	let { form }: { form: ActionData } = $props();
+
+	$effect(() => {
+		if (!form?.user) return;
+		untrack(() => {
+			user.data = form.user;
+			goto("/");
+		});
+	});
 </script>
 
 <main class="mx-auto mt-40 flex w-full max-w-[400px] flex-col">
@@ -47,5 +58,5 @@
 			>Register</button
 		>
 	</form>
-	<p class="mt-2" style="color: red">{form?.message ?? ''}</p>
+	<p class="mt-2" style="color: red">{form?.message ?? ""}</p>
 </main>

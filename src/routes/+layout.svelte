@@ -6,7 +6,6 @@
 	import { user } from "$lib/store.svelte";
 
 	let { children, data }: LayoutProps = $props();
-	setContext("user", () => data.user);
 	user.data = data.user;
 </script>
 

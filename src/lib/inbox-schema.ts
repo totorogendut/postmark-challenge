@@ -18,12 +18,35 @@ export const inboxSchema = z.object({
 		.min(SCHEMA_CONSTS.SENTIMENT.min)
 		.max(SCHEMA_CONSTS.SENTIMENT.max)
 		.describe(
-			`Sentiment value of the content of the email.
+			`Sentiment value of the content of the email, ranging from
+${SCHEMA_CONSTS.SENTIMENT.min} to ${SCHEMA_CONSTS.SENTIMENT.max}.
+
 Lower value means negative sentiment such as having angry remarks, insulting
 email recipient, etc. 
 Polite complaints and cold emails sits somewhere in the middle. 
 Frendlier emails or emails providing opportunities such as
 collaboration or sponsorship have better sentiment value.`,
+		),
+	fraudIndicator: z
+		.number()
+		.min(SCHEMA_CONSTS.FRAUD_INDICATOR.min)
+		.max(SCHEMA_CONSTS.FRAUD_INDICATOR.max)
+		.describe(
+			`Fraud indicator value of the content of the email, ranging from
+${SCHEMA_CONSTS.FRAUD_INDICATOR.min} to ${SCHEMA_CONSTS.FRAUD_INDICATOR.max}.
+Lower value means safe and trusted emails. 
+High value means that the email is untrusted and the sender has evil
+intention such as fraud, scam, fishing, blackmail, hacking, etc.`,
+		),
+	spamIndicator: z
+		.number()
+		.min(SCHEMA_CONSTS.SPAM_INDICATOR.min)
+		.max(SCHEMA_CONSTS.SPAM_INDICATOR.max)
+		.describe(
+			`Fraud indicator value of the content of the email, ranging from
+${SCHEMA_CONSTS.SPAM_INDICATOR.min} to ${SCHEMA_CONSTS.SPAM_INDICATOR.max}.
+Lower value means the email is not a spam. 
+High value means that the email is likely a spam.`,
 		),
 });
 

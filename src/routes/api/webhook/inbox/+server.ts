@@ -51,7 +51,7 @@ export const GET = (async ({ request }): Promise<Response> => {
 	try {
 		inboxSchema.parse(object);
 		const categories: MailCategory = Object.values(object.category).flat() || [];
-		const { summary } = object;
+		const { summary, sentiment, fraudIndicator, spamIndicator } = object;
 		await db.insert(mail).values({
 			mailToUser: user.id,
 			mailTo: user.email || "",
@@ -61,6 +61,9 @@ export const GET = (async ({ request }): Promise<Response> => {
 			mailFromName,
 			textBody,
 			summary,
+			sentiment,
+			fraudIndicator,
+			spamIndicator,
 		});
 	} catch (error) {
 		return new Response("Parsed object failed", {
@@ -69,5 +72,5 @@ export const GET = (async ({ request }): Promise<Response> => {
 		});
 	}
 
-	return new Response("ok");
+	return new Response("ok", { status: 200 });
 }) satisfies RequestHandler;

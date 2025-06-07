@@ -7,17 +7,23 @@ import { defaultInboxQuery, type allCategories } from "./_consts";
 import { postAction } from "./actions";
 import { untrack } from "svelte";
 import { minidenticon } from "minidenticons";
+import { PUBLIC_POSTMARK_INBOUND_EMAIL_ADDRESS } from "$env/static/public";
 
 class User {
 	data = $state({
+		id: "",
 		username: "",
 		email: "",
 		avatar: "",
 	});
 
+	inboundEmailAddress = $derived(
+		(PUBLIC_POSTMARK_INBOUND_EMAIL_ADDRESS || "").split("@").join(`+${this.data?.id}@`),
+	);
+
 	avatarURL = $derived(
-		this.data.avatar ||
-			"data:image/svg+xml;utf8," + encodeURIComponent(minidenticon(this.data.email)),
+		this.data?.avatar ||
+			"data:image/svg+xml;utf8," + encodeURIComponent(minidenticon(this.data?.id)),
 	);
 }
 

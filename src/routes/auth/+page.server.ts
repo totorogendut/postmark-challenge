@@ -2,10 +2,7 @@ import * as auth from "$lib/server/auth/user";
 import { fail, redirect } from "@sveltejs/kit";
 import { getRequestEvent } from "$app/server";
 import type { Actions, PageServerLoad } from "./$types";
-import {
-	deleteSessionTokenCookie,
-	invalidateSession,
-} from "$lib/server/auth/session";
+import { deleteSessionTokenCookie, invalidateSession } from "$lib/server/auth/session";
 
 export const load: PageServerLoad = async () => {
 	const user = requireLogin();
@@ -14,6 +11,7 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	logout: async (event) => {
+		console.log("logging out....");
 		if (!event.locals.session) {
 			return fail(401);
 		}

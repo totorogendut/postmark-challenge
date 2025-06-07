@@ -1,6 +1,6 @@
 # SnipMail
 
-A simple web app that summarize and categorize email inbox with the help of LLM like ChatGPT, Gemini, or Claude.
+A simple web app that summarize and categorize email inbox with the help of LLM like ChatGPT, Gemini, or Claude, and rank them based on the sentiment value, fraud indicator, and spam indicator.
 
 ## Prequisite
 
