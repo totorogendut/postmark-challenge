@@ -1,12 +1,6 @@
-import { hash, verify } from "@node-rs/argon2";
-import { encodeBase32LowerCase } from "@oslojs/encoding";
 import { fail, redirect } from "@sveltejs/kit";
-import { eq } from "drizzle-orm";
-import { db } from "$lib/server/db";
-import { users } from "$lib/server/db/schemas/users";
 import type { Actions, PageServerLoad } from "./$types";
 import { loginUser, registerUser } from "$lib/server/auth/user";
-import { setSessionTokenCookie } from "$lib/server/auth/session";
 
 export const load: PageServerLoad = async ({ locals, request }) => {
 	// if (locals.user) {
