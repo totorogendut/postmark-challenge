@@ -31,7 +31,6 @@ CREATE TABLE `user` (
 	`email` text,
 	`password_hash` text NOT NULL,
 	`avatar` text,
-	`mailbox_hash` text,
 	`created_at` integer,
 	`updated_at` integer
 );
@@ -39,7 +38,7 @@ CREATE TABLE `user` (
 CREATE UNIQUE INDEX `user_username_unique` ON `user` (`username`);--> statement-breakpoint
 CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);--> statement-breakpoint
 CREATE UNIQUE INDEX `name_idx` ON `user` (`username`);--> statement-breakpoint
-CREATE UNIQUE INDEX `email_idx` ON `user` (`email`);--> statement-breakpoint
+CREATE UNIQUE INDEX `inbound_email_address_idx` ON `user` (`email`);--> statement-breakpoint
 CREATE VIEW `inbox_category_view` AS SELECT
 	mail.mail_to_user AS user,
   CAST(COUNT(DISTINCT CASE WHEN value = 'sponsorship' THEN mail.id END) AS INTEGER) AS sponsorship_count,

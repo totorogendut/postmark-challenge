@@ -12,8 +12,8 @@ The backend uses SQLite as the database with Drizzle as ORM. By default it uses 
 
 ```bash
 # Generate SQLite .db file and push DB tables and schema
-bunx drizzle-kit generate
-bunx drizzle-kit push
+bun run db:generate
+bun run db:push
 ```
 
 ## Developing
@@ -28,7 +28,11 @@ bun seeds/populate.ts # NOTE: if better_sqlite3 throwing error uses
                       # tsx instead (https://tsx.is/)
 ```
 
-For development, you can setup remote tunnel or publicly forwarding the port on `5173` to expose the API for the purpose of receiving webhook from Postmark. The endpoint for receiving webhook is `/api/webhook/inbox`.
+For development, you can setup remote tunnel or publicly forwarding the port on `5173` to expose the API for the purpose of receiving webhook from Postmark. The endpoint for receiving webhook is `https://{yourwebsite.com}/api/webhook/inbox`.
+
+## How the app works
+
+Every user would
 
 ## Building
 

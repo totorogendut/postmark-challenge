@@ -9,7 +9,7 @@ export const load = (async ({ locals, url }) => {
 	if (!locals.user) return;
 
 	return {
-		mailboxHash: locals.user.mailboxHash,
+		email: locals.user.email,
 	};
 }) satisfies PageServerLoad;
 
@@ -18,8 +18,8 @@ export const actions = {
 		if (!locals.user?.id) return;
 		// TODO log the user in
 		const data = await request.formData();
-		const mailboxHash = data.get("mailboxHash") as string;
+		const email = data.get("email") as string;
 
-		await db.update(users).set({ mailboxHash }).where(eq(users.id, locals.user.id));
+		await db.update(users).set({ email }).where(eq(users.id, locals.user.id));
 	},
 } satisfies Actions;

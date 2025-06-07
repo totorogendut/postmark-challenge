@@ -12,10 +12,12 @@ export const users = sqliteTable(
 		email: text("email").unique(),
 		passwordHash: text("password_hash").notNull(),
 		avatar: text("avatar"),
-		mailboxHash: text("mailbox_hash"),
 		...BASE_TABLE,
 	},
-	(table) => [uniqueIndex("name_idx").on(table.username), uniqueIndex("email_idx").on(table.email)],
+	(t) => [
+		uniqueIndex("name_idx").on(t.username),
+		uniqueIndex("inbound_email_address_idx").on(t.email),
+	],
 );
 
 export const userRelations = relations(users, ({ many, one }) => ({

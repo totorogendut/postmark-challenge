@@ -10,22 +10,18 @@ import { eq, SQL } from "drizzle-orm";
 import { mail, type Mail, type MailCategory } from "$lib/server/db/schemas/inbox";
 import { postmarkWebhookSchema, type PostmarkWebhook } from "$lib/server/postmark/schema";
 import type { allCategories } from "$lib/_consts";
-
-interface Props {}
-
-const model = openai("gpt-4.1-nano", {
-	structuredOutputs: true,
-});
+import { getRandomLLM } from "$lib/server/ai";
 
 export const GET = (async ({ request }): Promise<Response> => {
 	const webhook: PostmarkWebhook = await request.json();
 	const {
 		TextBody: textBody,
 		Subject: subject,
-		MailboxHash: mailboxHash,
+		ToFull,
 		From: mailFrom,
 		FromName: mailFromName,
 	} = webhook;
+	const [{ Email }] = ToFull;
 
 	if (!textBody)
 		return new Response("Webhook data parsing failed", {
@@ -33,7 +29,7 @@ export const GET = (async ({ request }): Promise<Response> => {
 			statusText: "Failed to parse webhook data.",
 		});
 
-	const [user] = await db.select().from(userSchema).where(eq(userSchema.mailboxHash, mailboxHash));
+	const [user] = await db.select().from(userSchema).where(eq(userSchema.email, Email));
 
 	if (!user)
 		return new Response("No user found", {
@@ -42,7 +38,7 @@ export const GET = (async ({ request }): Promise<Response> => {
 		});
 
 	const { object } = await generateObject({
-		model,
+		model: getRandomLLM({ structuredOutputs: true }),
 		schemaName: "Email inbox parsing",
 		schemaDescription: `Parsing an incoming email by giving it summary
 			and categorized them by categories provided by schema.`,

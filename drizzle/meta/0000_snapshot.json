@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "3f3ee362-b305-401f-976d-1b159f8cc3e2",
+  "id": "bbc06654-6387-48c3-9690-2391c0867ade",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "mail": {
@@ -224,13 +224,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "mailbox_hash": {
-          "name": "mailbox_hash",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "created_at": {
           "name": "created_at",
           "type": "integer",
@@ -268,8 +261,8 @@
           ],
           "isUnique": true
         },
-        "email_idx": {
-          "name": "email_idx",
+        "inbound_email_address_idx": {
+          "name": "inbound_email_address_idx",
           "columns": [
             "email"
           ],

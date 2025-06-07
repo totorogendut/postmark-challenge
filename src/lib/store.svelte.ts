@@ -6,30 +6,35 @@ import { SvelteSet } from "svelte/reactivity";
 import { defaultInboxQuery, type allCategories } from "./_consts";
 import { postAction } from "./actions";
 import { untrack } from "svelte";
+import { minidenticon } from "minidenticons";
 
 class User {
-	name = $state(demoData.user.name);
-	email = $state(demoData.user.email);
-	avatar = $state(demoData.user.avatar);
-	inboxHash = $state("");
+	data = $state({
+		username: "",
+		email: "",
+		avatar: "",
+	});
 
-	constructor(opts?: Partial<UserSchema>) {
-		if (opts?.username) this.name = opts.username;
-		if (opts?.email) this.email = opts.email;
-		if (opts?.avatar) this.avatar = opts.avatar;
-		if (opts?.inboxHash) this.inboxHash = opts.inboxHash;
-	}
+	avatarURL = $derived(
+		this.data.avatar ||
+			"data:image/svg+xml;utf8," + encodeURIComponent(minidenticon(this.data.email)),
+	);
 }
 
 type ColumnData = MailSchema[];
+interface MailState {
+	onlyUnread: boolean;
+	orderBy: "createdAt" | "sentiment";
+}
 class Mail {
 	inboxList = $state<MailSchema[]>([]);
 	columns = $state(3);
 	queryOpts = $state(defaultInboxQuery);
 	selectedCategories = new SvelteSet();
 	loading = $state(false);
-	state = $state({
+	state = $state<MailState>({
 		onlyUnread: false,
+		orderBy: "createdAt",
 	});
 
 	columnsData = $derived.by(() => {
@@ -74,6 +79,7 @@ class Mail {
 			const res = await postAction("/api/inbox/", {
 				...this.queryOpts,
 				...(this.state.onlyUnread ? { hasRead: false } : {}),
+				orderBy: this.state.orderBy,
 				categories: Array.from(this.selectedCategories),
 			});
 

@@ -25,10 +25,11 @@ export const mail = sqliteTable(
 		mailToUser: text("mail_to_user").references(() => users.id),
 		...BASE_TABLE,
 	},
-	(table) => [
-		index("mail_to_idc").on(table.mailToUser),
-		index("created_at_idx").on(table.createdAt),
-		index("categories_idx").on(table.categories),
+	(t) => [
+		index("mail_to_idc").on(t.mailToUser),
+		index("created_at_idx").on(t.createdAt),
+		index("sentiment_idx").on(t.sentiment),
+		index("categories_idx").on(t.categories),
 	],
 );
 

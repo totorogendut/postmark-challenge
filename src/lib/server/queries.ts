@@ -10,7 +10,7 @@ export const getMailCategories = async (userId: string) =>
 interface MailQueryOpts {
 	limit?: number;
 	offset?: number;
-	orderBy?: SQL<unknown>;
+	orderBy?: string;
 	hasRead?: boolean;
 	categories?: string[];
 }
@@ -23,11 +23,22 @@ export const getMailInbox = async (opts?: Partial<MailQueryOpts>) => {
 		conditions.push(arrayContains(mail.categories, opts.categories));
 	}
 
+	const orderBy = (() => {
+		switch (opts?.orderBy) {
+			case "createdAt":
+				return desc(mail.createdAt);
+			case "sentiment":
+				return desc(mail.sentiment);
+			default:
+				return desc(mail.createdAt);
+		}
+	})();
+
 	return db
 		.select()
 		.from(mail)
 		.where(and(...conditions))
-		.orderBy(opts?.orderBy || desc(mail.createdAt))
+		.orderBy(orderBy)
 		.limit(opts?.limit || 10)
 		.offset(opts?.offset || 0);
 };
