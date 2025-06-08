@@ -39,7 +39,7 @@ class Mail {
 	columns = $state(3);
 	queryOpts = $state(defaultInboxQuery);
 	selectedCategories = new SvelteSet();
-	loading = $state(false);
+	loading = $state(true);
 	state = $state<MailState>({
 		onlyUnread: false,
 		orderBy: "createdAt",
@@ -66,6 +66,7 @@ class Mail {
 	insert(inbox: MailSchema[]) {
 		this.inboxList.push(...inbox);
 		this.queryOpts.offset += inbox.length;
+		this.loading = false;
 	}
 
 	toggleCategory(category: (typeof allCategories)[number]) {
@@ -96,10 +97,9 @@ class Mail {
 
 			if (!res.ok) return;
 			const json = await res.json();
-			if (!json[0]?.createdAt) throw new Error("failed decoding json on inbox fetch");
-			untrack(() => {
-				this.insert(json as MailSchema[]);
-			});
+			console.log(json);
+			if (!Array.isArray(json)) throw new Error("failed decoding json on inbox fetch");
+			this.insert(json as MailSchema[]);
 		} catch (error) {
 			console.error(error);
 		} finally {

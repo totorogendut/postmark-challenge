@@ -26,7 +26,7 @@
 		<MailInboxState />
 	</div>
 	<div class="flex min-h-[400px] flex-nowrap gap-4">
-		{#if mails.isEmpty}
+		{#if mails.isEmpty && !mails.loading && !mails.selectedCategories?.size}
 			<Tutorial />
 		{:else}
 			{#each Array(mails.columns) as item, idx}
