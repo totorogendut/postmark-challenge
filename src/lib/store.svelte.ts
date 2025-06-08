@@ -46,6 +46,7 @@ class Mail {
 		maxFraudIndicator: 25,
 		maxSpamIndicator: 25,
 	});
+	isEmpty = $derived(!this.inboxList?.length);
 
 	columnsData = $derived.by(() => {
 		const columnGroup: Array<ColumnData> = [];

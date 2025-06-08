@@ -10,8 +10,9 @@ import { hashPassword, verifyPassword } from "./_shared";
 
 export async function registerUser(username: string, password: string) {
 	const event = getRequestEvent();
-	if (!validateUsername(username)) throw new Error("Invalid username");
-	if (!validatePassword(password)) throw new Error("Invalid password");
+	if (!validateUsername(username))
+		throw new Error("Invalid username! Use lowercase, digits, -, and _.");
+	if (!validatePassword(password)) throw new Error("Invalid password. Min 6 characters.");
 
 	const userId = generateUserId();
 	// const passwordHash = await hash(password, {
