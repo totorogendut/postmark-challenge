@@ -29,7 +29,7 @@
 		{/if}
 	</div>
 	<h1 class="mt-4 mb-4 text-6xl leading-[1]">{data.mail?.subject}</h1>
-	<article class="prose text-2xl leading-[1.15] text-[var(--text-color)]">
+	<article class="prose min-h-[400px] text-2xl leading-[1.15] text-[var(--text-color)]">
 		{data.mail?.textBody}
 	</article>
 	<hr class="mt-12 mb-6 opacity-40" />
